@@ -1,5 +1,5 @@
-import { Header } from './components/Header/Header.jsx';
-import { Sidebar } from './components/Sidebar/Sidebar.jsx';
+import { Header } from './components/Header/Header';
+import { Sidebar } from './components/Sidebar/Sidebar';
 import { Post } from "./components/Post/Post";
 
 import './global.css'
@@ -20,7 +20,7 @@ export function App() {
             />
           </main>
       </div>
-      
+
     </div>
   )
 }
