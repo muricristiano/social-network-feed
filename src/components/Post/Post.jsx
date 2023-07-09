@@ -1,38 +1,38 @@
-import styles from './Post.module.css'
+import { format, formatDistance, formatDistanceToNow } from 'date-fns'
 import { Comment } from '../Comment/Comment'
 import { Avatar } from '../Avatar/Avatar';
+import styles from './Post.module.css'
 
 export function Post(props){
+    const publishedDateFormatted = format(props.publishedAt, "HH:mm'hs 'd'-'LLLL'")
+
+    const publishedDateRelativeToNow = formatDistanceToNow(props.publishedAt, {addSuffix: true})
+
     return (
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar hasBorder src="https://github.com/muricristiano.png"/>
+                    <Avatar hasBorder src={props.author.avatarUrl}/>
                     <div className={styles.authorInfo}>
-                        <strong>{props.author}</strong>
-                        <span>Web Developer</span>
+                        <strong>{props.author.name}</strong>
+                        <span>{props.author.role}</span>
                     </div>
                 </div> 
 
-                <time 
-                    title="30 de Junho de 2023, ás 9hs" 
-                    dateTime="2023-06-30 9:00:00"
-                >
-                    Published 1h ago
+                <time title={publishedDateFormatted} dateTime={props.publishedAt.toISOString()}>
+                    {publishedDateRelativeToNow}
                 </time>
 
             </header>
 
             <div className={styles.content}>
-            <p>Hello guys 👋</p>
-            <p>I've just uploaded another project to my portfolio. It's a project I built using React and Node. The project is called DoctorCare 🚀</p>
-            <p><a href=''> github.com/example/doctorcare </a></p>
-            <p>
-            <a href=''> #newproject </a>
-            <a href=''> #work </a>
-            <a href=''> #network </a>
-        </p>
-
+                {props.content.map(line => {
+                    if (line.type === 'paragraph'){
+                        return <p>{line.content}</p>
+                    } else if (line.type === 'link') {
+                        return <p><a href="">{line.content}</a></p>
+                    }
+                })}
             </div>
 
 
