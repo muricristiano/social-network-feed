@@ -35,7 +35,6 @@ export function Post(props){
                 })}
             </div>
 
-
             <form className={styles.commentForm}>
                 <strong> Give your feedback </strong>
                 <textarea placeholder='Leave your comment'/>
