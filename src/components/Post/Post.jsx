@@ -1,12 +1,27 @@
-import { format, formatDistance, formatDistanceToNow } from 'date-fns'
-import { Comment } from '../Comment/Comment'
-import { Avatar } from '../Avatar/Avatar';
+import { useState } from 'react';
+import { format, formatDistanceToNow } from 'date-fns'
 import styles from './Post.module.css'
 
+import { Comment } from '../Comment/Comment'
+import { Avatar } from '../Avatar/Avatar';
+
 export function Post(props){
+    const [commentsArray, setCommentsArray] = useState([])
+    const [newCommentText, setNewCommentText] = useState(''); // Mirroring Text Area Value
+
     const publishedDateFormatted = format(props.publishedAt, "HH:mm'hs 'd'-'LLLL'")
 
     const publishedDateRelativeToNow = formatDistanceToNow(props.publishedAt, {addSuffix: true})
+
+    function handleNewCommentChange(){
+        setNewCommentText(event.target.value)
+    }
+
+    function handleCreateNewComment(){
+        event.preventDefault()
+        setCommentsArray([...commentsArray, newCommentText]);
+        setNewCommentText('');
+    }
 
     return (
         <article className={styles.post}>
@@ -28,26 +43,31 @@ export function Post(props){
             <div className={styles.content}>
                 {props.content.map(line => {
                     if (line.type === 'paragraph'){
-                        return <p>{line.content}</p>
+                        return <p key={line.content}>{line.content}</p>
                     } else if (line.type === 'link') {
-                        return <p><a href="">{line.content}</a></p>
+                        return <p key={line.content}><a href="">{line.content}</a></p>
                     }
                 })}
             </div>
 
-            <form className={styles.commentForm}>
+            <form onSubmit={handleCreateNewComment} className={styles.commentForm}>
                 <strong> Give your feedback </strong>
-                <textarea placeholder='Leave your comment'/>
+                <textarea 
+                    placeholder='Leave your comment'
+                    onChange={handleNewCommentChange}
+                    value={newCommentText}
+                />
                 <footer>
                     <button type="submit"> Send </button>
                 </footer>
             </form>
-
+ 
             <div className={styles.commentList}>
-                <Comment />
-                <Comment />
-                <Comment />
+                {commentsArray.map(comment => {
+                    return <Comment key={comment} content={comment} />
+                })}
             </div>
+
         </article>
     )
 }
