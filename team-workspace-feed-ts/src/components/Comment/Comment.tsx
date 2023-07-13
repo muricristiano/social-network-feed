@@ -3,6 +3,8 @@ import styles from './Comment.module.css'
 import { Avatar } from '../Avatar/Avatar'
 import { useState } from 'react';
 
+import MuriAvatar from '../../assets/muri-avatar.png'
+
 interface CommentProps{
     content: string;
     onClickDeleteComment: (comment: string) => void;
@@ -21,7 +23,7 @@ export function Comment({content, onClickDeleteComment}: CommentProps){
 
     return (
         <div className={styles.comment}>
-            <Avatar src='https://github.com/muricristiano.png' title={'Avatar img'} alt={''} onClick={() => alert("Arrow function triggered!")} />
+            <Avatar src={MuriAvatar} title={'Avatar img'} alt={''} onClick={() => alert("Arrow function triggered!")} />
 
             <div className={styles.commentBox}>
                 <div className={styles.commentContent}>
