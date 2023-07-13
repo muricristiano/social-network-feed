@@ -21,7 +21,7 @@ export function Comment({content, onClickDeleteComment}: CommentProps){
 
     return (
         <div className={styles.comment}>
-            <Avatar src='https://github.com/muricristiano.png'/>
+            <Avatar src='https://github.com/muricristiano.png' title={'Avatar img'} alt={''} onClick={() => alert("Arrow function triggered!")} />
 
             <div className={styles.commentBox}>
                 <div className={styles.commentContent}>
