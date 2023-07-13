@@ -1,38 +1,58 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
 import { format, formatDistanceToNow } from 'date-fns'
 import styles from './Post.module.css'
 
 import { Comment } from '../Comment/Comment'
 import { Avatar } from '../Avatar/Avatar';
 
-export function Post(props){
-    const [commentsArray, setCommentsArray] = useState([])
+interface PostProps {
+    author: Author;
+    publishedAt: Date;
+    content: Content[];
+}
+
+interface Author {
+        name: string;
+        role: string;
+        avatarUrl: string;
+}
+
+interface Content {
+    type: 'paragraph' | 'link';
+    content: string;
+}
+
+export function Post({author, publishedAt, content}: PostProps){
+    const [commentsArray, setCommentsArray] = useState(Array<string>)
+
     const [newCommentText, setNewCommentText] = useState(''); // Mirroring Text Area Value
 
-    const publishedDateFormatted = format(props.publishedAt, "HH:mm'hs 'd'-'LLLL'")
-    const publishedDateRelativeToNow = formatDistanceToNow(props.publishedAt, {addSuffix: true})
+    const publishedDateFormatted = format(publishedAt, "HH:mm'hs 'd'-'LLLL'")
+    const publishedDateRelativeToNow = formatDistanceToNow(publishedAt, {addSuffix: true})
 
-    function handleNewCommentChange(){
-        event.target.setCustomValidity('') //  Validation trigger is prevented
-        setNewCommentText(event.target.value)
-    }
-
-    function handleCreateNewComment(){
+    function handleCreateNewComment(event: FormEvent){
         event.preventDefault()
+
         setCommentsArray([...commentsArray, newCommentText]);
         setNewCommentText('');
     }
 
-    function deleteComment(commentToDelete){
+    function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>){
+        event.target.setCustomValidity('') //  Validation trigger is prevented
+        setNewCommentText(event.target.value)
+    }
+ 
+    function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
+        event.target.setCustomValidity('You must type a comment')
+    }
+
+    function deleteComment(commentToDelete: string){
         const commentsWithoutDeletedOne = commentsArray.filter(comment => {
             return comment !== commentToDelete;
         })
         setCommentsArray(commentsWithoutDeletedOne)
     }
 
-    function handleNewCommentInvalid(){
-        event.target.setCustomValidity('You must type a comment')
-    }
 
     const isNewCommentTextEmpty = newCommentText.length === 0;
 
@@ -40,21 +60,21 @@ export function Post(props){
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                    <Avatar hasBorder src={props.author.avatarUrl}/>
+                    <Avatar hasBorder src={author.avatarUrl}/>
                     <div className={styles.authorInfo}>
-                        <strong>{props.author.name}</strong>
-                        <span>{props.author.role}</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div> 
 
-                <time title={publishedDateFormatted} dateTime={props.publishedAt.toISOString()}>
+                <time title={publishedDateFormatted} dateTime={publishedAt.toISOString()}>
                     {publishedDateRelativeToNow}
                 </time>
 
             </header>
 
             <div className={styles.content}>
-                {props.content.map(line => {
+                {content.map(line => {
                     if (line.type === 'paragraph'){
                         return <p key={line.content}>{line.content}</p>
                     } else if (line.type === 'link') {
