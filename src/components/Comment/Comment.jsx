@@ -11,7 +11,7 @@ export function Comment(props){
     }
 
     function handleApplauseComment(){
-        setApplauseCount(applauseCount + 1);
+        setApplauseCount((state) => {return state + 1});
     }
 
     return (
