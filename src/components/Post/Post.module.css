@@ -111,6 +111,12 @@
     background: var(--color-one-active);
 }
 
+.commentForm button[type=submit]:disabled {
+    background: var(--gray-600);
+    color: var(--gray-500);
+    cursor: not-allowed;
+}
+
 .commentList {
     margin-top: 2rem;
 }

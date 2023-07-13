@@ -3,6 +3,10 @@ import styles from './Comment.module.css'
 import { Avatar } from '../Avatar/Avatar'
 
 export function Comment(props){
+    function handleDeleteComment(){
+        props.onClickDeleteComment(props.content);
+    }
+
     return (
         <div className={styles.comment}>
             <Avatar src='https://github.com/muricristiano.png'/>
@@ -18,7 +22,7 @@ export function Comment(props){
                             </time>
                         </div>
 
-                        <button title='Delete comment'>
+                        <button onClick={handleDeleteComment} title='Delete comment'>
                             <Trash size={24}/>
                         </button>
 
